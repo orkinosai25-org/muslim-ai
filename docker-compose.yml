@@ -1,0 +1,45 @@
+# Docker Compose — NurAI Stage 1 local development
+# Starts Ollama (CPU-only by default) and the Streamlit chat UI.
+#
+# Usage:
+#   docker compose up --build
+#
+# The Streamlit UI will be available at http://localhost:8501
+# The Ollama API will be available at http://localhost:11434
+#
+# Pull the model before first use:
+#   docker compose exec ollama ollama pull llama3:8b
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nurai-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nurai-streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3:8b}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

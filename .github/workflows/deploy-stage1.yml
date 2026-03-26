@@ -1,0 +1,195 @@
+name: "Stage 1 — Deploy Hello-World Chatbot"
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform"
+        required: true
+        default: "deploy"
+        type: choice
+        options:
+          - deploy
+          - start
+          - stop
+          - destroy
+      vm_size:
+        description: "Azure VM size (override)"
+        required: false
+        default: "Standard_NC4as_T4_v3"
+      location:
+        description: "Azure region"
+        required: false
+        default: "eastus"
+
+env:
+  AZURE_RESOURCE_GROUP: rg-muslimAI-stage1
+  AZURE_VM_NAME: muslimAI-llama3-vm
+  AZURE_VM_ADMIN: azureuser
+  OLLAMA_MODEL: llama3:8b
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Deploy: provision a new VM and bootstrap Ollama + Streamlit
+  # ---------------------------------------------------------------------------
+  deploy:
+    name: "Deploy VM & Ollama"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'deploy'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set subscription
+        run: az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
+      - name: Create resource group
+        run: |
+          az group create \
+            --name "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --location "${{ github.event.inputs.location || 'eastus' }}" \
+            --output none
+
+      - name: Deploy VM
+        run: |
+          az vm create \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}" \
+            --image "Canonical:ubuntu-24_04-lts:server:latest" \
+            --size "${{ github.event.inputs.vm_size || 'Standard_NC4as_T4_v3' }}" \
+            --admin-username "${{ env.AZURE_VM_ADMIN }}" \
+            --ssh-key-values "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" \
+            --public-ip-sku Standard \
+            --os-disk-size-gb 64 \
+            --storage-sku Premium_LRS \
+            --custom-data scripts/setup-ollama.sh \
+            --output json | tee /tmp/vm-output.json
+
+      - name: Open Ollama and Streamlit ports
+        run: |
+          NSG="${{ env.AZURE_VM_NAME }}-nsg"
+          az network nsg rule create \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --nsg-name "${NSG}" \
+            --name Allow-Ollama \
+            --priority 1100 --protocol Tcp --direction Inbound \
+            --source-address-prefixes "*" \
+            --destination-port-ranges 11434 --access Allow --output none
+          az network nsg rule create \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --nsg-name "${NSG}" \
+            --name Allow-Streamlit \
+            --priority 1200 --protocol Tcp --direction Inbound \
+            --source-address-prefixes "*" \
+            --destination-port-ranges 8501 --access Allow --output none
+
+      - name: Enable auto-shutdown (22:00 UTC)
+        run: |
+          VM_ID=$(az vm show \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}" \
+            --query "id" --output tsv)
+          az resource create \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --resource-type "Microsoft.DevTestLab/schedules" \
+            --name "shutdown-computevm-${{ env.AZURE_VM_NAME }}" \
+            --location "${{ github.event.inputs.location || 'eastus' }}" \
+            --properties '{
+              "status": "Enabled",
+              "taskType": "ComputeVmShutdownTask",
+              "dailyRecurrence": {"time": "2200"},
+              "timeZoneId": "UTC",
+              "targetResourceId": "'"${VM_ID}"'"
+            }' \
+            --output none
+
+      - name: Print connection details
+        run: |
+          VM_IP=$(az vm show \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}" \
+            --show-details --query publicIps --output tsv)
+          echo "## NurAI Stage 1 deployed 🎉" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| | |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| VM public IP | \`${VM_IP}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Ollama API   | http://${VM_IP}:11434 |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Streamlit UI | http://${VM_IP}:8501 |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "> Cloud-init is still running on the VM. " \
+               "Allow ~5 minutes for Ollama and the model to be ready." >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------------------
+  # Start: start a deallocated VM
+  # ---------------------------------------------------------------------------
+  start:
+    name: "Start VM"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'start'
+    permissions: {}
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Start VM
+        run: |
+          az vm start \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}"
+          VM_IP=$(az vm show \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}" \
+            --show-details --query publicIps --output tsv)
+          echo "VM started — Streamlit UI: http://${VM_IP}:8501" >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------------------
+  # Stop: deallocate the VM (stops billing)
+  # ---------------------------------------------------------------------------
+  stop:
+    name: "Stop VM (deallocate)"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'stop'
+    permissions: {}
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deallocate VM
+        run: |
+          az vm deallocate \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_VM_NAME }}"
+          echo "VM deallocated — billing stopped." >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------------------
+  # Destroy: delete the entire resource group
+  # ---------------------------------------------------------------------------
+  destroy:
+    name: "Destroy all Stage 1 resources"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'destroy'
+    permissions: {}
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete resource group
+        run: |
+          az group delete \
+            --name "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --yes --no-wait
+          echo "Resource group deletion initiated." >> "$GITHUB_STEP_SUMMARY"
