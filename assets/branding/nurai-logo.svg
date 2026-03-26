@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120" role="img" aria-label="NurAI logo">
+  <title>NurAI — Light for the Ummah in the AI Era</title>
+  <defs>
+    <!-- Deep Teal background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D4F5C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a3d48;stop-opacity:1" />
+    </linearGradient>
+    <!-- Gold shimmer on lantern -->
+    <radialGradient id="lanternGlow" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" style="stop-color:#F0D060;stop-opacity:0.9" />
+      <stop offset="60%" style="stop-color:#C8A84B;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#9A7A2A;stop-opacity:0" />
+    </radialGradient>
+    <!-- Geometric star clip -->
+    <clipPath id="starClip">
+      <circle cx="44" cy="60" r="38"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background rounded rectangle -->
+  <rect width="320" height="120" rx="12" ry="12" fill="url(#bgGrad)"/>
+
+  <!-- Subtle geometric arabesque ring -->
+  <circle cx="44" cy="60" r="42" fill="none" stroke="#C8A84B" stroke-width="0.6" opacity="0.35"/>
+  <circle cx="44" cy="60" r="36" fill="none" stroke="#C8A84B" stroke-width="0.4" opacity="0.25"/>
+
+  <!-- 8-point star decorative ring (rotated squares) -->
+  <g transform="translate(44,60)" opacity="0.18">
+    <rect x="-16" y="-16" width="32" height="32" fill="none" stroke="#C8A84B" stroke-width="0.8" transform="rotate(0)"/>
+    <rect x="-16" y="-16" width="32" height="32" fill="none" stroke="#C8A84B" stroke-width="0.8" transform="rotate(45)"/>
+  </g>
+
+  <!-- Lantern body -->
+  <g transform="translate(44,60)">
+    <!-- Lantern top cap -->
+    <path d="M-7,-24 L7,-24 L9,-18 L-9,-18 Z" fill="#C8A84B"/>
+    <!-- Lantern hanging chain -->
+    <line x1="0" y1="-34" x2="0" y2="-24" stroke="#C8A84B" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Lantern body hexagon -->
+    <path d="M-10,-18 L10,-18 L14,0 L10,18 L-10,18 L-14,0 Z" fill="#C8A84B" opacity="0.15"/>
+    <path d="M-10,-18 L10,-18 L14,0 L10,18 L-10,18 L-14,0 Z" fill="none" stroke="#C8A84B" stroke-width="1.5"/>
+    <!-- Lantern glass panels (light inside) -->
+    <path d="M-8,-16 L8,-16 L11,0 L8,16 L-8,16 L-11,0 Z" fill="url(#lanternGlow)" opacity="0.85"/>
+    <!-- Lantern horizontal bands -->
+    <line x1="-11" y1="0" x2="11" y2="0" stroke="#C8A84B" stroke-width="0.8" opacity="0.6"/>
+    <!-- Lantern bottom cap -->
+    <path d="M-9,18 L9,18 L6,24 L-6,24 Z" fill="#C8A84B"/>
+    <!-- Lantern bottom knob -->
+    <circle cx="0" cy="26" r="2.5" fill="#C8A84B"/>
+
+    <!-- Crescent moon (overlapping circle cutout technique) -->
+    <circle cx="0" cy="-7" r="7" fill="#C8A84B" opacity="0.9"/>
+    <circle cx="3" cy="-9" r="5.5" fill="#0D4F5C" opacity="1"/>
+
+    <!-- Flame / light rays -->
+    <circle cx="0" cy="0" r="4" fill="#F0D060" opacity="0.6"/>
+    <line x1="0" y1="-6" x2="0" y2="-10" stroke="#F0D060" stroke-width="0.8" opacity="0.5"/>
+    <line x1="5.2" y1="-3" x2="8.5" y2="-5" stroke="#F0D060" stroke-width="0.8" opacity="0.5"/>
+    <line x1="-5.2" y1="-3" x2="-8.5" y2="-5" stroke="#F0D060" stroke-width="0.8" opacity="0.5"/>
+    <line x1="5.2" y1="3" x2="8.5" y2="5" stroke="#F0D060" stroke-width="0.8" opacity="0.4"/>
+    <line x1="-5.2" y1="3" x2="-8.5" y2="5" stroke="#F0D060" stroke-width="0.8" opacity="0.4"/>
+  </g>
+
+  <!-- Arabic نور (Nūr = Light) in gold, small, above wordmark -->
+  <text x="108" y="44" font-family="'Amiri', 'Scheherazade New', 'Arial', serif" font-size="16" fill="#C8A84B" text-anchor="start" opacity="0.75" direction="rtl">نُور</text>
+
+  <!-- NurAI wordmark -->
+  <text x="108" y="75" font-family="'Cinzel', 'Cormorant Garamond', 'Georgia', serif" font-size="34" font-weight="700" fill="#F8F4E8" letter-spacing="2">NurAI</text>
+
+  <!-- Tagline -->
+  <text x="109" y="95" font-family="'Lato', 'Helvetica Neue', 'Arial', sans-serif" font-size="10.5" fill="#C8A84B" letter-spacing="1.2">LIGHT FOR THE UMMAH IN THE AI ERA</text>
+
+  <!-- Thin gold separator line -->
+  <line x1="108" y1="50" x2="300" y2="50" stroke="#C8A84B" stroke-width="0.5" opacity="0.4"/>
+</svg>
