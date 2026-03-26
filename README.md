@@ -37,6 +37,7 @@ Unlike 'neutral' AIs, this model strives to answer as a believing Muslim, servin
 | Document | Description |
 |---|---|
 | [Project Overview & Docs Index](./docs/README.md) | Vision, objectives, audience, and quick start |
+| [**Stage 1: Hello-World Chatbot**](./docs/stage1-hello-world.md) | Deploy Llama 3 on Azure, Streamlit UI, GitHub Actions, cost controls |
 | [NurAI Foundation in Risale-i Nur](./docs/nurai-foundation.md) | Why Risale-i Nur is the spiritual backbone of NurAI |
 | [System Architecture](./docs/architecture.md) | High-level design, Azure services, data flow, security |
 | [Model Choices & Approaches](./docs/model.md) | Why Llama 3, RAG rationale, corpus sources, guardrails |

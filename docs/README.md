@@ -8,6 +8,7 @@
 
 | Document | Description |
 |---|---|
+| [Stage 1: Hello-World Chatbot](./stage1-hello-world.md) | Deploy Llama 3 on Azure, Streamlit UI, GitHub Actions, cost controls |
 | [Architecture](./architecture.md) | High-level system design, Azure services, and data flow |
 | [Model Choices & Approaches](./model.md) | Why Llama 3, RAG rationale, dataset sourcing, guardrails |
 | [Deployment & Scaling](./deployment.md) | Azure infrastructure, cost tips, SaaS options |
