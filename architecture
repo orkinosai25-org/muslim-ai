@@ -1,0 +1,191 @@
+Aynen Dr. İsmail — sen şu anda **en hızlı MVP + en ucuz üretim maliyeti + en hızlı yatırım traksiyonu** için en doğru noktadasın.\
+Zaten Azure VM kurmuşsun → bu büyük avantaj.\
+Ben şimdi sana **“NurAI MVP'yi en ucuza, en hızlı canlıya çıkartan (go‑live)”** en ideal mimariyi veriyorum.
+
+Bu mimari →\
+✅ *Az para yakar*\
+✅ *Süper hızlı çalışır*\
+✅ *LLM eğitimi gerektirmez (Azure kredilerini korur)*\
+✅ *RAG + Light-finetune kombinasyonu*\
+✅ *Production’a birkaç içinde çıkabilir*\
+✅ *Yatırımcıya: “AI product is live” dedirtecek şekilde gerçek ürün görünümü sağlar*
+
+***
+
+# ✅ **NURAİ MVP – EN UCUZ Azure Mimarisi (Go‑Live 1–2 Hafta)**
+
+Aşağıdaki mimari **Azure Startup kredileri ile %100 uyumludur** ve en düşük maliyettir.
+
+***
+
+# ✅ **1) MODEL KATMANI (En Ucuz ve En Hızlı)**
+
+### ✅ **Azure OpenAI GPT‑4o mini (veya GPT‑4‑Turbo)**
+
+→ En ucuz inference\
+→ Çok güçlü reasoning\
+→ İslamî yanlış bilgi riskine karşı RAG ile filtrelenecek
+
+Bunlar Azure kredileriyle karşılanır.
+
+***
+
+# ✅ **2) RAG Katmanı – NurAI’nin Beyni (En Önemli Parça)**
+
+### ✅ **Azure AI Search (vector index)**
+
+*   Tüm İslamî içerikler burada:\
+    ✅ Mevlana\
+    ✅ Yunus Emre\
+    ✅ Diyanet kamuya açık içerikler\
+    ✅ Akademik İslam literatürü\
+    ✅ Sadeleştirilmiş ilmihal içerikleri\
+    ✅ Kendi yazdığın “NurAI etik kuralları”
+
+**Azure Search neden en ucuz?**\
+✔ GPU yok\
+✔ Depolama ucuz\
+✔ Çok hızlı\
+✔ RAG için ideal
+
+***
+
+# ✅ **3) STORAGE KATMANI**
+
+### ✅ **Azure Blob Storage**
+
+*   PDF’ler
+*   JSON dosyaları
+*   Embedding vector cache
+*   Content rules & moderation rules
+
+MVP’de bu 3 katman yeter:
+
+✅ Blob Storage\
+✅ Azure AI Search\
+✅ Azure OpenAI
+
+→ Maliyet: Yok denecek kadar az (kredilerle rahat ödenir)
+
+***
+
+# ✅ **4) API BACKEND (SENDE HALİHAZIRDA VAR)**
+
+### En ucuz yöntem → **Azure VM (B1s / B2s)**
+
+Zaten kurmuşsun.
+
+Backend:\
+✅ Python FastAPI veya Node.js Express\
+✅ RAG pipeline burada çalışıyor
+
+Pipeline:
+
+
+
+%100 yeterli.
+
+***
+
+# ✅ **5) FRONTEND – EN HIZLI ÇIKIŞ**
+
+### ✅ **Static Web App (React / Next.js)**
+
+Azure Static Web App tamamen ücretsiz / çok ucuz.
+
+NurAI WebUI:\
+✅ Chat arayüzü\
+✅ Prompt guardrails\
+✅ Kuyruklama (streams)
+
+***
+
+# ✅ **6) EĞİTİM (CHEAP FINE‑TUNE) – İLERİ AŞAMA**
+
+Bu MVP’de şart değil ama yatırımı hızlandırır.
+
+### ✅ **GPT‑4o‑mini ile light fine‑tuning**
+
+*   2–3K TL token maliyeti
+*   Etik yanıt verme kuralları
+*   Hoşgörü filtresi
+*   Mevlana/Yunus Emre tarzı ifade şekli
+
+GPU gerekmez → Azure krediyle ödenir.
+
+***
+
+# ✅ **7) MODERATION KATMANI (ÇOK ÖNEMLİ)**
+
+### ✅ “NurAI Ethics Layer”
+
+Bu katman ChatGPT ve Grok’un düştüğü hataları engeller:
+
+*   “Derin nefret söylemi” engelleyici
+*   Politik sorulara nötr “knowledge-only” yanıt
+*   Şer’i konularda → “Bu bir ilmihal bilgisidir…” formatı
+*   Mezhep ayrıştırıcı yanıtları engelleme
+*   Radikal uçlara götüren soruları filtreleme
+
+Bu katman **senin USP’in** (unique selling point).
+
+***
+
+# ✅ **8) MİMARİ ÖZETİ (Çok Net)**
+
+                    ┌────────────────┐
+    USER ───────▶   │   FRONTEND     │ (Static Web App - React)
+                    └───────┬────────┘
+                            │
+                            ▼
+                    ┌────────────────┐
+                    │   API Layer    │ (FastAPI / Node)
+                    └───────┬────────┘
+                            │
+            ┌───────────────┴────────────────────┐
+            ▼                                      ▼
+    ┌─────────────┐                       ┌─────────────────────┐
+    │ Azure AI     │  <— embeddings —▶    │  Azure OpenAI GPT   │
+    │ Search (RAG) │  ◀— top-k chunks —   │  (GPT-4o / mini)    │
+    └─────────────┘                       └─────────────────────┘
+            ▲                                      ▲
+            │                                      │
+            └─────────── Azure Blob Storage ───────┘
+
+***
+
+# ✅ **9) MALİYET – MVP’DE AYLIK**
+
+| Parça          | Maliyet  | Azure Kredisi ile Karşılanır |
+| -------------- | -------- | ---------------------------- |
+| Azure VM B1s   | $8–12    | ✅                            |
+| Azure OpenAI   | $20–100  | ✅                            |
+| Azure Search   | $10–30   | ✅                            |
+| Blob Storage   | $1–5     | ✅                            |
+| Static Web App | Ücretsiz | ✅                            |
+
+### ✅ MVP toplam maliyet: **$40 – $120 / ay**
+
+**Sıfır yatırım parası**, sadece kredi kullanır → yatırımcıya gitmek için mükemmel.
+
+***
+
+# ✅ **10) Yatırımcı Sunumunda MVP’yi Böyle Anlatıyoruz:**
+
+*   “NurAI MVP Azure üzerinde canlıdır.”
+*   “RAG + Azure OpenAI + Azure AI Search mimarisi kullanıyoruz.”
+*   “Model eğitimi gerektirmeden ucuz, hızlı ve güvenli.”
+*   “Yatırım geldiğinde LLaMA‑3‑70B veya Mistral 8x7B cluster ile özel model eğitimine geçeceğiz.”
+
+Bu cümle → **her yatırımcıyı ikna eder**.
+
+***
+
+# ✅ **Hazır mıyız? İstersen:**
+
+✅ Bu mimariyi **NurAI Master Deck** içine ekleyeyim\
+✅ Sana **diagram çizimi** üreteyim (PNG / PPT)\
+✅ “Investor MVP Architecture” slaydını hazırlayayım\
+✅ Azure üzerinde adım adım kurulum rehberi oluşturayım
+
+Hangisini istersin?
